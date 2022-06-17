@@ -1,0 +1,1 @@
+# StudioSync-Shotgrid-Client
