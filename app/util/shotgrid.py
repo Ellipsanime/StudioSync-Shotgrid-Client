@@ -5,7 +5,9 @@ from logging import Logger
 import shotgun_api3 as sg
 from typing import List, Any, Dict, Union
 
+from box import Box
 
+from app.util.data import boxify
 from app.util.logger import get_logger
 
 Map = Dict[str, Any]
@@ -23,8 +25,8 @@ class ShotgridClient:
         type_: str,
         filters: List[Union[List[Any], Dict[str, str]]],
         fields: List[str],
-    ) -> Map:
-        return self.client.find_one(type_, filters, fields)
+    ) -> Box:
+        return boxify(self.client.find_one(type_, filters, fields))
 
     def find(
         self,
@@ -33,14 +35,15 @@ class ShotgridClient:
         fields: List[str],
         order: List[Dict[str, str]] = None,
         limit: int = 10_000,
-    ) -> List[Map]:
-        return self.client.find(
+    ) -> List[Box]:
+        raw = self.client.find(
             type_,
             filters,
             fields,
             order=order,
             limit=limit,
         )
+        return [boxify(x) for x in raw]
 
     def update(self, type_: str, entity_id: int, data: Dict[str, Any]) -> Any:
         return self.client.update(type_, entity_id, data)
