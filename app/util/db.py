@@ -15,7 +15,8 @@ async def connect_file_db(flag: str = "rwc") -> Connection | None:
     try:
         db_path = os.environ["DB_PATH"]
         db = await aiosqlite.connect(f"file:{db_path}?mode={flag}", uri=True)
-        await db.set_trace_callback(_LOG.debug)
+        if os.environ.get("ENV_NAME") == "DEV":
+            await db.set_trace_callback(_LOG.debug)
         cursor = await db.execute("PRAGMA foreign_keys = 1;")
         await cursor.close()
         db.row_factory = aiosqlite.Row

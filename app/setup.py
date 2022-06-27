@@ -40,17 +40,17 @@ def _setup_app() -> FastAPI:
 
 @lru_cache
 def _setup_tasks(app: FastAPI) -> FastAPI:
-    @app.on_event("startup")
-    @repeat_every(seconds=45)
-    async def synchronize_data() -> Any:
-        _LOG.info("Start synchronization")
-        await sync_domain.synchronize_all()
 
     @app.on_event("startup")
     async def bootstrap_db() -> Any:
         _LOG.info("Setup database")
         await ddl.setup_db()
 
+    @app.on_event("startup")
+    @repeat_every(seconds=45)
+    async def synchronize_data() -> Any:
+        _LOG.info("Start synchronization")
+        await sync_domain.synchronize_all()
     return app
 
 

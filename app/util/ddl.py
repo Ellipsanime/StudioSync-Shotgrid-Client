@@ -7,6 +7,7 @@ _LOG = get_logger(__name__.split(".")[-1])
 
 _SCRIPT = """
 CREATE TABLE IF NOT EXISTS object_store (key TEXT PRIMARY KEY, value BLOB);
+CREATE TABLE IF NOT EXISTS event_queue (id INT PRIMARY KEY, event TEXT);
 """
 
 
