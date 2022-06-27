@@ -53,12 +53,12 @@ def _post_filter_events(events: List[Box]) -> Iterator[Box]:
 
 def _fetch_events(
     filters: List[Union[List[Any], Dict[str, str]]]
-) -> List[Dict[str, Any]]:
+) -> List[Box]:
     client = shotgrid()
     raw_events = client.find(_TYPE, filters, _FIELDS, _ORDER, _LIMIT)
     return list(_post_filter_events(raw_events))
 
 
-def find_latest_events_by_id(last_id: int) -> List[Dict[str, Any]]:
+def find_latest_events_by_id(last_id: int) -> List[Box]:
     _LOG.info(f"find latest events with id: {last_id}")
     return _fetch_events(_filters_with_id(last_id))

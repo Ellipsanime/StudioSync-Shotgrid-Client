@@ -11,7 +11,11 @@ _MIN_LAST_ID = os.environ.get("MIN_LAST_ID", 0)
 async def synchronize_all() -> Any:
     _LOG.info("Fetching last event id...")
     last_id = max(await config_repo.fetch_last_id(), _MIN_LAST_ID)
-    shotgrid_event_repo.find_latest_events_by_id(last_id)
-
     _LOG.info("Fetching events...")
+    events = shotgrid_event_repo.find_latest_events_by_id(last_id)
+    _LOG.info(f"{len(events)} event(s) fetched")
+    if events and events[-1].id:
+        pass
+
+
 
